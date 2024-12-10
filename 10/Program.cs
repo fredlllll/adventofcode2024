@@ -47,7 +47,7 @@ namespace _10
     {
         public Map(string input) : base(input, (x) => new Cell(x)) { }
 
-        public int GetNumTrailHeads(int x, int y)
+        public int GetNumTrailHeads(int x, int y, bool saveVisited = true)
         {
             var baseCell = GetNoCheck(x, y);
             if (baseCell.height > 0)
@@ -65,7 +65,10 @@ namespace _10
 
                 if (!visited.Contains(here))
                 {
-                    visited.Add(here);
+                    if (saveVisited)
+                    {
+                        visited.Add(here);
+                    }
                     if (here.height == 9)
                     {
                         num9s++;
@@ -98,8 +101,7 @@ namespace _10
 
         public int GetTrailheadRating(int x, int y)
         {
-            //im useless
-            throw new NotImplementedException();
+            return GetNumTrailHeads(x, y, false);
         }
     }
 
