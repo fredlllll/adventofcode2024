@@ -95,10 +95,6 @@ namespace _11
                 if (currentLevel >= level)
                 {
                     count++;
-                    /*while(stack.Peek().level == currentLevel - 1 && stack.Count > 0)
-                    {
-                        currentLevel = stack.Pop().level;
-                    }*/
                     continue;
                 }
 
@@ -148,21 +144,25 @@ namespace _11
                 return value;
             }
 
-            string valueStr = node.value.ToString();
             int nextLevel = node.level + 1;
             long result = 0;
             if (node.value == 0)
             {
-                result= GetChildCount((nextLevel, 1), maxLevel);
-            }
-            else if (valueStr.Length % 2 == 0)
-            {
-                result = GetChildCount((nextLevel, long.Parse(valueStr.Substring(0, valueStr.Length / 2))), maxLevel) +
-                    GetChildCount((nextLevel, long.Parse(valueStr.Substring(valueStr.Length / 2))), maxLevel);
+                result = GetChildCount((nextLevel, 1), maxLevel);
             }
             else
             {
-                result = GetChildCount((nextLevel, node.value * 2024), maxLevel);
+                int numDigits = (int)(Math.Log10(node.value)) + 1;
+                if (numDigits % 2 == 0)
+                {
+                    int divisor = (int)Math.Pow(10, numDigits / 2);
+                    result = GetChildCount((nextLevel, node.value / divisor), maxLevel) +
+                             GetChildCount((nextLevel, node.value % divisor), maxLevel);
+                }
+                else
+                {
+                    result = GetChildCount((nextLevel, node.value * 2024), maxLevel);
+                }
             }
             memo[node] = result;
             return result;
@@ -170,8 +170,9 @@ namespace _11
 
         public long CountNodesAtLevel(int level)
         {
-            //return GetChildCount((0, 2024), 75);
-            return roots.Select((x) => {
+            memo.Clear();
+            return roots.Select((x) =>
+            {
                 return GetChildCount((0, x), level);
             }).Sum();
         }
@@ -202,7 +203,6 @@ namespace _11
 
         static void Task2()
         {
-            Init();
             if (row == null)
             {
                 return;
