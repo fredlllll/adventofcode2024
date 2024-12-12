@@ -32,5 +32,11 @@ namespace Shared
                 }
             }
         }
+
+        public Field(int width, int height)
+        {
+            this.width = width; this.height = height;
+            field = new T[width * height];
+        }
     }
 }
