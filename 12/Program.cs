@@ -13,6 +13,7 @@ namespace _12
             if (debug)
             {
                 garden = new Garden("RRRRIICCFF\r\nRRRRIICCCF\r\nVVRRRCCFFF\r\nVVRCCCJFFF\r\nVVVVCJJCFE\r\nVVIVCCJJEE\r\nVVIIICJJEE\r\nMIIIIIJJEE\r\nMIIISIJEEE\r\nMMMISSJEEE");
+                garden = new Garden("EEEEE\r\nEXXXX\r\nEEEEE\r\nEXXXX\r\nEEEEE");
             }
             else
             {
