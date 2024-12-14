@@ -59,40 +59,5 @@ namespace _13
             }
             return buttonACount * 3 + buttonBCount;
         }
-
-        public long CalculateMinCost2()
-        {
-            //stolen from https://github.com/ryanheath/aoc2024/blob/main/Day13.cs
-            long ax = buttonA.x;
-            long ay = buttonA.y;
-            long bx = buttonA.x;
-            long by = buttonA.y;
-            long px = prize.x;
-            long py = prize.y;
-
-            // a = (5400*22)-(67*8400) / ((22*34) + (-94*67))
-            var d1 = py * bx - by * px;
-            var d2 = bx * ay - ax * by;
-            long a = 0;
-            long remainder = 0;
-            try
-            {
-                a = Math.DivRem(d1, d2, out remainder);
-            }
-            catch
-            {
-                return -1;
-            }
-
-            if (remainder != 0)
-            {
-                return -1;
-            }
-
-            var b = (px - ax * a) / bx;
-
-            return 3 * a + 1 * b;
-
-        }
     }
 }
