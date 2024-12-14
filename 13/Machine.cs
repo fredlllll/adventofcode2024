@@ -8,8 +8,7 @@ namespace _13
 {
     public class Machine
     {
-        public (int x, int y) buttonA, buttonB, prize;
-        public int calculatedMinCost = -1;
+        public (long x, long y) buttonA, buttonB, prize;
         public Machine(string input)
         {
             var parts = input.Split('\n');
@@ -19,38 +18,81 @@ namespace _13
             prize = parseLine(parts[2]);
         }
 
-        private (int x, int y) parseLine(string line)
+        public void AddToPrizePos(long val)
+        {
+            prize.x += val;
+            prize.y += val;
+        }
+
+        private (long x, long y) parseLine(string line)
         {
             var xPos = line.IndexOf('X');
             var commaPos = line.IndexOf(',');
             var yPos = line.IndexOf('Y');
 
-            int x = int.Parse(line.Substring(xPos + 2, commaPos - xPos - 2));
-            int y = int.Parse(line.Substring(yPos + 2));
+            var x = long.Parse(line.Substring(xPos + 2, commaPos - xPos - 2));
+            var y = long.Parse(line.Substring(yPos + 2));
 
             return (x, y);
         }
 
-        public int CalculateMinCost()
+        public long CalculateMinCost()
         {
-            calculatedMinCost = 0;
+            // stolen from:https://github.com/mikequinlan/AOC2024/blob/main/Day13.cs
 
-            /*
-            px = ax *n1 + bx *n2;
-            py = ay *n1 + by *n2;
+            var determinant = buttonA.x * buttonB.y - buttonA.y * buttonB.x;
+            if (determinant == 0)
+            {
+                return -1;
+            }
+            var acNumerator = prize.x * buttonB.y - prize.y * buttonB.x;
+            var bcNumerator = prize.y * buttonA.x - prize.x * buttonA.y;
+            if (acNumerator % determinant != 0 || bcNumerator % determinant != 0)
+            {
+                return -1;
+            }
+            var buttonACount = acNumerator / determinant;
+            var buttonBCount = bcNumerator / determinant;
+            if (buttonACount < 0 || buttonBCount < 0)
+            {
+                return -1;
+            }
+            return buttonACount * 3 + buttonBCount;
+        }
 
-            (px - ax *n1)/bx = n2;
-            (py - by *n2)/ay = n1;
+        public long CalculateMinCost2()
+        {
+            //stolen from https://github.com/ryanheath/aoc2024/blob/main/Day13.cs
+            long ax = buttonA.x;
+            long ay = buttonA.y;
+            long bx = buttonA.x;
+            long by = buttonA.y;
+            long px = prize.x;
+            long py = prize.y;
 
-            (px- ax *((py - by *n2)/ay))/bx = n2;
-            (p_x- a_x *((p_y - b_y *n_2)/a_y))/b_x = n_2;
+            // a = (5400*22)-(67*8400) / ((22*34) + (-94*67))
+            var d1 = py * bx - by * px;
+            var d2 = bx * ay - ax * by;
+            long a = 0;
+            long remainder = 0;
+            try
+            {
+                a = Math.DivRem(d1, d2, out remainder);
+            }
+            catch
+            {
+                return -1;
+            }
 
-            */
+            if (remainder != 0)
+            {
+                return -1;
+            }
 
-            //welp time is up, not gonna solve this one either
+            var b = (px - ax * a) / bx;
 
+            return 3 * a + 1 * b;
 
-            return calculatedMinCost;
         }
     }
 }

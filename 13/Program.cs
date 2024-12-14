@@ -21,15 +21,37 @@ namespace _13
         {
             Init();
 
+            long sum = 0;
+            int prizesSum = 0;
             foreach (var machine in machines)
             {
-                machine.CalculateMinCost();
+                var cost = machine.CalculateMinCost();
+                if (cost > 0)
+                {
+                    sum += cost;
+                    prizesSum++;
+                }
             }
+            Console.WriteLine($"total winnable prizes: {prizesSum} cost: {sum}");
         }
 
         static void Task2()
         {
             Init();
+
+            long sum = 0;
+            long prizesSum = 0;
+            foreach (var machine in machines)
+            {
+                machine.AddToPrizePos(10000000000000);
+                var cost = machine.CalculateMinCost();
+                if (cost > 0)
+                {
+                    sum += cost;
+                    prizesSum++;
+                }
+            }
+            Console.WriteLine($"total winnable prizes: {prizesSum} cost: {sum}");
         }
 
         static void Main(string[] args)
